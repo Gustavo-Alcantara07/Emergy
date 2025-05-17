@@ -1,16 +1,16 @@
 package View;
 
-import java.awt.*;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.net.URL;
 
 public class MainMenu extends JFrame {
-
+    private JSplitPane splitPane;
     private JPanel menuPanel;
-    private JPanel contentPanel;
-    private JLabel textoLabel;
+    private BackgroundPanel contentPanel;
     private JLabel imagemLabel;
+    private JLabel textoLabel;
+    private Timer timer;
     private int index = 0;
 
     private final String[] imagens = {
@@ -30,115 +30,165 @@ public class MainMenu extends JFrame {
     };
 
     public MainMenu() {
-        setTitle("Menu Principal");
-        setSize(1920, 1080);
-        setLayout(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-
-        configurarMenuLateral();
-        configurarPainelDeConteudo();
-        iniciarAnimacaoMenu();
+        super("Menu Principal");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
+        initComponents();
     }
 
-    private void configurarMenuLateral() {
-        menuPanel = new JPanel(null);
+    private void initComponents() {
+        // === 1) Barra lateral ===
+        menuPanel = new JPanel(new BorderLayout());
         menuPanel.setBackground(Color.decode("#2C2F33"));
-        menuPanel.setBounds(0, 0, 250, 1080);
 
-        int y = 40;
-        int espacamento = 50;
+        JPanel buttonsPanel = new JPanel();
+        buttonsPanel.setOpaque(false);
+        buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
+        buttonsPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 10, 10));
 
-        adicionarBotaoMenu("Início", y += espacamento, null);
-        adicionarBotaoMenu("Conceito", y += espacamento, e -> mostrarConteudo(new ConceptPage()));
-        adicionarBotaoMenu("Relatórios", y += espacamento, null);
-        adicionarBotaoMenu("Metodologia", y += espacamento, null);
-        adicionarBotaoMenu("Sobre Nós", y += espacamento, null);
+        String[] itens = {"Início", "Conceito", "Relatórios", "Metodologia", "Sobre Nós", "Calcular"};
+        for (String texto : itens) {
+            JButton b = new JButton(texto);
+            b.setAlignmentX(Component.LEFT_ALIGNMENT);
+            b.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+            b.setFont(new Font("Dialog", Font.BOLD, 18));
+            b.setForeground(texto.equals("Calcular") ? Color.decode("#D1A954") : Color.WHITE);
+            b.setOpaque(false);
+            b.setContentAreaFilled(false);
+            b.setBorderPainted(false);
+            b.setFocusPainted(false);
+            b.setHorizontalAlignment(SwingConstants.LEFT);
 
-        JButton calcular = new JButton("Calcular");
-        calcular.setBounds(50, y += espacamento + 10, 150, 40);
-        calcular.setFont(new Font("Dialog", Font.BOLD, 16));
-        calcular.setForeground(Color.decode("#D1A954"));
-        calcular.setFocusPainted(false);
-        calcular.setContentAreaFilled(false);
-        calcular.setBorderPainted(false);
-        calcular.setHorizontalAlignment(SwingConstants.CENTER);
-        menuPanel.add(calcular);
+            if (texto.equals("Conceito")) {
+                b.addActionListener(e -> showConceptPage());
+            } else if (texto.equals("Metodologia")) {
+                b.addActionListener(e -> showMethodologyPage());
+            } else if (texto.equals("Calcular")) {
+                b.addActionListener(e -> showCalculationPage());
+            }
+
+            buttonsPanel.add(b);
+            buttonsPanel.add(Box.createVerticalStrut(15));
+        }
+
+        menuPanel.add(buttonsPanel, BorderLayout.NORTH);
+
+        // === 1b) Carrossel ===
+        JPanel carousel = new JPanel();
+        carousel.setOpaque(false);
+        carousel.setLayout(new BoxLayout(carousel, BoxLayout.Y_AXIS));
+        carousel.add(Box.createVerticalStrut(150));
 
         imagemLabel = new JLabel();
-        imagemLabel.setBounds(25, y += 80, 200, 240);
+        imagemLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         imagemLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
-        imagemLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        imagemLabel.setVerticalAlignment(SwingConstants.CENTER);
-        imagemLabel.setIcon(new ImageIcon(getClass().getResource(imagens[0])));
-        menuPanel.add(imagemLabel);
+        carousel.add(imagemLabel);
+        carousel.add(Box.createVerticalStrut(10));
 
-        textoLabel = new JLabel(textos[0], SwingConstants.CENTER);
-        textoLabel.setFont(new Font("Dialog", Font.BOLD, 12));
+        textoLabel = new JLabel("", SwingConstants.CENTER);
         textoLabel.setForeground(Color.WHITE);
-        textoLabel.setBounds(10, y + 250, 230, 100);
-        menuPanel.add(textoLabel);
+        textoLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
+        textoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        carousel.add(textoLabel);
 
+        menuPanel.add(carousel, BorderLayout.CENTER);
+
+        // === 1c) Botão Sair ===
         JButton sair = new JButton("Sair");
-        sair.setBounds(50, 920, 150, 40); // Centralizado dentro dos 250px de largura
         sair.setFont(new Font("Dialog", Font.BOLD, 18));
         sair.setForeground(Color.decode("#D1A954"));
-        sair.setBackground(Color.decode("#2C2F33"));
-        sair.setFocusPainted(false);
-        sair.setBorderPainted(false);
+        sair.setOpaque(false);
         sair.setContentAreaFilled(false);
-        sair.setHorizontalAlignment(SwingConstants.CENTER);
+        sair.setBorderPainted(false);
+        sair.setFocusPainted(false);
+        sair.setAlignmentX(Component.CENTER_ALIGNMENT);
         sair.addActionListener(e -> System.exit(0));
-        menuPanel.add(sair);
 
-        add(menuPanel);
+        JPanel exitHolder = new JPanel();
+        exitHolder.setOpaque(false);
+        exitHolder.setLayout(new BoxLayout(exitHolder, BoxLayout.Y_AXIS));
+        exitHolder.add(Box.createVerticalGlue());
+        exitHolder.add(sair);
+        exitHolder.add(Box.createVerticalStrut(20));
+
+        menuPanel.add(exitHolder, BorderLayout.SOUTH);
+
+        // === 2) Painel de conteúdo (inicial) ===
+        contentPanel = new BackgroundPanel("/View/Images/Menu_Page.jpg");
+        contentPanel.setLayout(new BorderLayout());
+
+        // === 3) SplitPane ===
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, menuPanel, contentPanel);
+        splitPane.setDividerLocation(250);
+        splitPane.setDividerSize(1);
+        splitPane.setEnabled(false);
+        getContentPane().add(splitPane);
+
+        // === 4) Iniciar carrossel ===
+        startCarousel();
     }
 
-    private void adicionarBotaoMenu(String texto, int y, ActionListener action) {
-        JButton botao = new JButton(texto);
-        botao.setBounds(25, y, 200, 40);
-        botao.setFont(new Font("Dialog", Font.BOLD, 18));
-        estilizarBotao(botao);
-        if (action != null) botao.addActionListener(action);
-        menuPanel.add(botao);
+    private void startCarousel() {
+        updateCarousel();
+        timer = new Timer(10_000, e -> updateCarousel());
+        timer.start();
     }
 
-    private void estilizarBotao(AbstractButton b) {
-        b.setForeground(Color.WHITE);
-        b.setBackground(Color.decode("#2C2F33"));
-        b.setFocusPainted(false);
-        b.setBorderPainted(false);
-        b.setContentAreaFilled(false);
-        b.setHorizontalAlignment(SwingConstants.LEFT);
+    private void updateCarousel() {
+        URL u = getClass().getResource(imagens[index]);
+        if (u != null) {
+            Image img = new ImageIcon(u).getImage()
+                    .getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+            imagemLabel.setIcon(new ImageIcon(img));
+        } else {
+            System.err.println("⚠️ Não achei: " + imagens[index]);
+        }
+        textoLabel.setText(textos[index]);
+        index = (index + 1) % imagens.length;
     }
 
-    private void configurarPainelDeConteudo() {
-        contentPanel = new JPanel(null);
-        contentPanel.setBounds(250, 0, 1670, 1080);
-        add(contentPanel);
-    }
-
-    private void mostrarConteudo(JPanel novoPainel) {
+    private void showConceptPage() {
+        ConceptPage painel = new ConceptPage();
         contentPanel.removeAll();
-        novoPainel.setBounds(0, 0, 1670, 1080);
-        contentPanel.add(novoPainel);
+        contentPanel.add(painel, BorderLayout.CENTER);
         contentPanel.revalidate();
         contentPanel.repaint();
     }
 
-    private void iniciarAnimacaoMenu() {
-        Timer timer = new Timer(10000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                index = (index + 1) % textos.length;
-                textoLabel.setText(textos[index]);
-                imagemLabel.setIcon(new ImageIcon(getClass().getResource(imagens[index])));
-            }
-        });
-        timer.start();
+    private void showCalculationPage() {
+        CalculationPage painel = new CalculationPage();
+        contentPanel.removeAll();
+        contentPanel.add(painel, BorderLayout.CENTER);
+        contentPanel.revalidate();
+        contentPanel.repaint();
+    }
+
+    private void showMethodologyPage() {
+        MethodologyPage painel = new MethodologyPage();
+        contentPanel.removeAll();
+        contentPanel.add(painel, BorderLayout.CENTER);
+        contentPanel.revalidate();
+        contentPanel.repaint();
     }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new MainMenu().setVisible(true));
+    }
+
+    private class BackgroundPanel extends JPanel {
+        private Image bg;
+        BackgroundPanel(String resourcePath) {
+            URL url = getClass().getResource(resourcePath);
+            if (url != null) {
+                bg = new ImageIcon(url).getImage();
+            }
+        }
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if (bg != null) {
+                g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
+            }
+        }
     }
 }
