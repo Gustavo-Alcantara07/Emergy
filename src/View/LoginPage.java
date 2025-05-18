@@ -11,22 +11,16 @@ public class LoginPage extends JFrame {
     private JPasswordField senhaField;
 
     public LoginPage() {
-        // Configurações da janela
         super("Login - Emergia");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(1920, 1080);
-        setLocationRelativeTo(null);
-        setLayout(null);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-        // 1) Imagem de fundo como painel de conteúdo
         ImageIcon bgIcon = new ImageIcon(getClass().getResource("/View/Images/Login_Page.jpg"));
         JLabel background = new JLabel(bgIcon);
-        background.setBounds(0, 0, 1920, 1080);
+        background.setLayout(new BorderLayout());
         setContentPane(background);
-        background.setLayout(null);
 
-        // 2) Painel de login translúcido
-        JPanel loginPanel = new JPanel(null) {
+        JPanel loginPanel = new JPanel(new GridBagLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -37,58 +31,76 @@ public class LoginPage extends JFrame {
             }
         };
         loginPanel.setOpaque(false);
-        loginPanel.setBounds(100, 200, 500, 500);
-        background.add(loginPanel);
+        loginPanel.setPreferredSize(new Dimension(450, 550));
 
-        // 3) Título "LOGIN"
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 0;
+
+        // Título
+        gbc.gridy = 0;
         JLabel loginLabel = new JLabel("LOGIN", SwingConstants.CENTER);
-        loginLabel.setBounds(0, 30, 500, 40);
         loginLabel.setFont(new Font("Dialog", Font.BOLD, 28));
         loginLabel.setForeground(Color.WHITE);
-        loginPanel.add(loginLabel);
+        loginLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        loginPanel.add(loginLabel, gbc);
 
-        // 4) Label e campo "USUÁRIO"
+        // Usuário
+        gbc.gridy = 1;
         JLabel usuarioLabel = new JLabel("USUÁRIO", SwingConstants.CENTER);
-        usuarioLabel.setBounds(70, 100, 360, 25);
-        usuarioLabel.setFont(new Font("Dialog", Font.BOLD, 18));
+        usuarioLabel.setFont(new Font("Dialog", Font.BOLD, 16));
         usuarioLabel.setForeground(Color.WHITE);
-        loginPanel.add(usuarioLabel);
+        usuarioLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        loginPanel.add(usuarioLabel, gbc);
 
-        usuarioField = new JTextField();
-        usuarioField.setBounds(70, 130, 360, 40);
+        gbc.gridy = 2;
+        usuarioField = new JTextField(20);
         usuarioField.setFont(new Font("Dialog", Font.PLAIN, 16));
-        loginPanel.add(usuarioField);
+        usuarioField.setHorizontalAlignment(JTextField.CENTER);
+        loginPanel.add(usuarioField, gbc);
 
-        // 5) Label e campo "SENHA"
+        // Senha
+        gbc.gridy = 3;
         JLabel senhaLabel = new JLabel("SENHA", SwingConstants.CENTER);
-        senhaLabel.setBounds(70, 190, 360, 25);
-        senhaLabel.setFont(new Font("Dialog", Font.BOLD, 18));
+        senhaLabel.setFont(new Font("Dialog", Font.BOLD, 16));
         senhaLabel.setForeground(Color.WHITE);
-        loginPanel.add(senhaLabel);
+        senhaLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        loginPanel.add(senhaLabel, gbc);
 
-        senhaField = new JPasswordField();
-        senhaField.setBounds(70, 220, 360, 40);
+        gbc.gridy = 4;
+        senhaField = new JPasswordField(20);
         senhaField.setFont(new Font("Dialog", Font.PLAIN, 16));
-        loginPanel.add(senhaField);
+        senhaField.setHorizontalAlignment(JTextField.CENTER);
+        senhaField.setDocument(new javax.swing.text.PlainDocument() {{
+            putProperty("filterNewlines", Boolean.TRUE);
+        }});
+        loginPanel.add(senhaField, gbc);
 
-        // 6) Botão "ENTRAR"
+        // Botão Entrar
+        gbc.gridy = 5;
         JButton entrarButton = new JButton("ENTRAR");
-        entrarButton.setBounds(180, 290, 140, 40);
         entrarButton.setFont(new Font("Dialog", Font.BOLD, 18));
         entrarButton.setFocusPainted(false);
         entrarButton.addActionListener(this::realizarLogin);
-        loginPanel.add(entrarButton);
+        loginPanel.add(entrarButton, gbc);
 
-        // 7) Botões de link sem borda
+        // Links
+        gbc.gridy = 6;
         JButton criarContaButton = new JButton("CRIAR CONTA");
-        criarContaButton.setBounds(180, 380, 140, 25);
         estilizarLink(criarContaButton, Color.GREEN);
-        loginPanel.add(criarContaButton);
+        loginPanel.add(criarContaButton, gbc);
 
+        gbc.gridy = 7;
         JButton esqueceuSenhaButton = new JButton("ESQUECEU A SENHA");
-        esqueceuSenhaButton.setBounds(150, 420, 200, 25);
         estilizarLink(esqueceuSenhaButton, Color.RED);
-        loginPanel.add(esqueceuSenhaButton);
+        loginPanel.add(esqueceuSenhaButton, gbc);
+
+        // Wrapper à esquerda com margem
+        JPanel wrapper = new JPanel(new FlowLayout(FlowLayout.LEFT, 100, 200));
+        wrapper.setOpaque(false);
+        wrapper.add(loginPanel);
+        background.add(wrapper, BorderLayout.CENTER);
     }
 
     private void estilizarLink(AbstractButton b, Color cor) {
@@ -102,9 +114,10 @@ public class LoginPage extends JFrame {
     private void realizarLogin(ActionEvent e) {
         String usuario = usuarioField.getText();
         String senha = new String(senhaField.getPassword());
-        if (usuario.equals("admin") && senha.equals("1234")) {
+
+        if (usuario.equalsIgnoreCase("admin") && senha.equals("1234")) {
             dispose();
-            new MainMenu().setVisible(true);
+            new MainMenu(usuario).setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "Usuário ou senha incorretos.");
         }

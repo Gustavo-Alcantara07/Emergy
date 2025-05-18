@@ -29,29 +29,48 @@ public class MainMenu extends JFrame {
             "<html><center><i>\"A emergia é a energia usada direta e indiretamente para produzir um serviço ou produto.\"</i><br>— Ortega, 2005.</center></html>"
     };
 
-    public MainMenu() {
+    public MainMenu(String usuario) {
         super("Menu Principal");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
-        initComponents();
+        initComponents(usuario);
     }
 
-    private void initComponents() {
-        // === 1) Barra lateral ===
-        menuPanel = new JPanel(new BorderLayout());
+    private void initComponents(String usuario) {
+        menuPanel = new JPanel();
+        menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
         menuPanel.setBackground(Color.decode("#2C2F33"));
 
+        // === Painel do usuário ===
+        JPanel userPanel = new JPanel();
+        userPanel.setOpaque(false);
+        userPanel.setLayout(new BoxLayout(userPanel, BoxLayout.X_AXIS));
+        userPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 10, 0));
+
+        ImageIcon rawIcon = new ImageIcon(getClass().getResource("/View/Images/Logo_User.png"));
+        Image userImg = rawIcon.getImage().getScaledInstance(35, 35, Image.SCALE_SMOOTH);
+        JLabel userIcon = new JLabel(new ImageIcon(userImg));
+        JLabel userName = new JLabel(usuario);
+        userName.setFont(new Font("Dialog", Font.BOLD, 16));
+        userName.setForeground(Color.WHITE);
+        userName.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+
+        userPanel.add(Box.createRigidArea(new Dimension(20, 0))); // alinhamento esquerdo
+        userPanel.add(userIcon);
+        userPanel.add(userName);
+
+        // === Painel de botões ===
         JPanel buttonsPanel = new JPanel();
-        buttonsPanel.setOpaque(false);
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
-        buttonsPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 10, 10));
+        buttonsPanel.setOpaque(false);
+        buttonsPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
         String[] itens = {"Início", "Conceito", "Relatórios", "Metodologia", "Sobre Nós", "Calcular"};
         for (String texto : itens) {
             JButton b = new JButton(texto);
             b.setAlignmentX(Component.LEFT_ALIGNMENT);
-            b.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-            b.setFont(new Font("Dialog", Font.BOLD, 18));
+            b.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+            b.setFont(new Font("Dialog", Font.BOLD, 16));
             b.setForeground(texto.equals("Calcular") ? Color.decode("#D1A954") : Color.WHITE);
             b.setOpaque(false);
             b.setContentAreaFilled(false);
@@ -67,13 +86,24 @@ public class MainMenu extends JFrame {
                 b.addActionListener(e -> showCalculationPage());
             }
 
+            buttonsPanel.add(Box.createRigidArea(new Dimension(20, 0))); // alinhamento esquerdo
             buttonsPanel.add(b);
-            buttonsPanel.add(Box.createVerticalStrut(15));
+            buttonsPanel.add(Box.createVerticalStrut(10));
         }
 
-        menuPanel.add(buttonsPanel, BorderLayout.NORTH);
+        // === Agrupar usuário e botões ===
+        JPanel agrupado = new JPanel();
+        agrupado.setOpaque(false);
+        agrupado.setLayout(new BoxLayout(agrupado, BoxLayout.Y_AXIS));
+        agrupado.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
-        // === 1b) Carrossel ===
+        agrupado.add(userPanel);
+        agrupado.add(Box.createVerticalStrut(40)); // espaçamento entre logo e botões
+        agrupado.add(buttonsPanel);
+
+        menuPanel.add(agrupado);
+
+        // === Carrossel ===
         JPanel carousel = new JPanel();
         carousel.setOpaque(false);
         carousel.setLayout(new BoxLayout(carousel, BoxLayout.Y_AXIS));
@@ -91,9 +121,9 @@ public class MainMenu extends JFrame {
         textoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         carousel.add(textoLabel);
 
-        menuPanel.add(carousel, BorderLayout.CENTER);
+        menuPanel.add(carousel);
 
-        // === 1c) Botão Sair ===
+        // === Botão Sair ===
         JButton sair = new JButton("Sair");
         sair.setFont(new Font("Dialog", Font.BOLD, 18));
         sair.setForeground(Color.decode("#D1A954"));
@@ -111,20 +141,19 @@ public class MainMenu extends JFrame {
         exitHolder.add(sair);
         exitHolder.add(Box.createVerticalStrut(20));
 
-        menuPanel.add(exitHolder, BorderLayout.SOUTH);
+        menuPanel.add(exitHolder);
 
-        // === 2) Painel de conteúdo (inicial) ===
+        // === Painel de Conteúdo ===
         contentPanel = new BackgroundPanel("/View/Images/Menu_Page.jpg");
         contentPanel.setLayout(new BorderLayout());
 
-        // === 3) SplitPane ===
+        // === SplitPane ===
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, menuPanel, contentPanel);
         splitPane.setDividerLocation(250);
         splitPane.setDividerSize(1);
         splitPane.setEnabled(false);
         getContentPane().add(splitPane);
 
-        // === 4) Iniciar carrossel ===
         startCarousel();
     }
 
@@ -137,8 +166,7 @@ public class MainMenu extends JFrame {
     private void updateCarousel() {
         URL u = getClass().getResource(imagens[index]);
         if (u != null) {
-            Image img = new ImageIcon(u).getImage()
-                    .getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+            Image img = new ImageIcon(u).getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
             imagemLabel.setIcon(new ImageIcon(img));
         } else {
             System.err.println("⚠️ Não achei: " + imagens[index]);
@@ -172,7 +200,7 @@ public class MainMenu extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new MainMenu().setVisible(true));
+        SwingUtilities.invokeLater(() -> new MainMenu("Admin").setVisible(true));
     }
 
     private class BackgroundPanel extends JPanel {
