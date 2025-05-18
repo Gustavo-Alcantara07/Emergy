@@ -4,17 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1df0abd4-713d-4400-8b4e-269d95de7676" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/jfree_jcommon.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/jfree_jfreechart.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/View/CalculadoraEmergia.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/View/MethodologyPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="1df0abd4-713d-4400-8b4e-269d95de7676" name="Changes" comment="Alt">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Emergia.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Emergia.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/View/CalculationPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/View/CalculationPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/View/ConceptPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/View/ConceptPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/View/MainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/View/MainMenu.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,7 +152,23 @@
       <option name="project" value="LOCAL" />
       <updated>1747500916521</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Alt">
+      <option name="closed" value="true" />
+      <created>1747597175957</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1747597175957</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Alt">
+      <option name="closed" value="true" />
+      <created>1747597189930</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1747597189930</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
