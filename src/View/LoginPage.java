@@ -115,7 +115,7 @@ public class LoginPage extends JFrame {
         String usuario = usuarioField.getText();
         String senha = new String(senhaField.getPassword());
 
-        if (usuario.equalsIgnoreCase("admin") && senha.equals("1234")) {
+        if (usuario.equalsIgnoreCase("Minha Pica") && senha.equals("1-10")) {
             dispose();
             new MainMenu(usuario).setVisible(true);
         } else {
