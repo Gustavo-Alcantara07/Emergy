@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1df0abd4-713d-4400-8b4e-269d95de7676" name="Changes" comment="Alt">
+      <change afterPath="$PROJECT_DIR$/src/View/EsqueceuSenha.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/View/LoginPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/View/LoginPage.java" afterDir="false" />
     </list>
@@ -58,6 +59,7 @@
   "keyToString": {
     "Application.CalculationPage.executor": "Run",
     "Application.ConceptPage.executor": "Run",
+    "Application.EsqueceuSenha.executor": "Run",
     "Application.LoginPage.executor": "Run",
     "Application.LoginScreen.executor": "Run",
     "Application.MainMenu.executor": "Run",
@@ -185,7 +187,23 @@
       <option name="project" value="LOCAL" />
       <updated>1747601892529</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Alt">
+      <option name="closed" value="true" />
+      <created>1747602712104</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1747602712104</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Alt">
+      <option name="closed" value="true" />
+      <created>1747602728143</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1747602728143</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">

@@ -85,18 +85,23 @@ public class LoginPage extends JFrame {
         entrarButton.addActionListener(this::realizarLogin);
         loginPanel.add(entrarButton, gbc);
 
-        // Links
+        // Link Criar Conta
         gbc.gridy = 6;
         JButton criarContaButton = new JButton("CRIAR CONTA");
         estilizarLink(criarContaButton, Color.GREEN);
         loginPanel.add(criarContaButton, gbc);
 
+        // Link Esqueceu Senha
         gbc.gridy = 7;
         JButton esqueceuSenhaButton = new JButton("ESQUECEU A SENHA");
         estilizarLink(esqueceuSenhaButton, Color.RED);
+        esqueceuSenhaButton.addActionListener(e -> {
+            dispose();
+            new EsqueceuSenha().setVisible(true);
+        });
         loginPanel.add(esqueceuSenhaButton, gbc);
 
-        // Wrapper à esquerda com margem
+        // Wrapper alinhado à esquerda com margem vertical ajustada
         JPanel wrapper = new JPanel(new FlowLayout(FlowLayout.LEFT, 100, 200));
         wrapper.setOpaque(false);
         wrapper.add(loginPanel);
@@ -115,7 +120,7 @@ public class LoginPage extends JFrame {
         String usuario = usuarioField.getText();
         String senha = new String(senhaField.getPassword());
 
-        if (usuario.equalsIgnoreCase("Minha Pica") && senha.equals("1-10")) {
+        if (usuario.equalsIgnoreCase("admin") && senha.equals("1234")) {
             dispose();
             new MainMenu(usuario).setVisible(true);
         } else {
